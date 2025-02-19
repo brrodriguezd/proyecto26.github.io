@@ -1,0 +1,35 @@
+name: Desplegar sitio en GitHub Pages
+
+on:
+ push:
+   branches:
+     - main  # Reemplaza con la rama que desees utilizar
+
+permissions:
+ contents: read
+ pages: write
+ id-token: write
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - name: Checkout del código
+       uses: actions/checkout@v4
+
+     - name: Configurar Node.js
+       uses: actions/setup-node@v3
+       with:
+         node-version: '14'  # Puedes especificar otra versión si es necesario
+
+     - name: Instalar dependencias
+       run: npm install
+
+     - name: Construir el sitio
+       run: npm run build  # Asegúrate de que este script esté definido en tu package.json
+
+     - name: Desplegar a GitHub Pages
+       uses: peaceiris/actions-gh-pages@v3
+       with:
+         github_token: ${{ secrets.GITHUB_TOKEN }}
+         publish_dir: ./public  # Reemplaza con el directorio de salida de tu sitio
